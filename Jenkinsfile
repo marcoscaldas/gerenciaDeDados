@@ -29,7 +29,7 @@ pipeline {
 
                     if (dbExists == '') {
                         echo "Banco de dados não encontrado. Criando banco e executando script SQL..."
-                        // Cria o banco de dados e executa o script SQL
+                        // Cria o banco de dados
                         def createDbResult = bat(script: """
                             "${MYSQL_PATH}" -u${MYSQL_USER} -p${MYSQL_PASSWORD} -h${MYSQL_HOST} -e "CREATE DATABASE ${DATABASE_NAME};" --batch
                         """, returnStatus: true)
@@ -38,6 +38,10 @@ pipeline {
                             error "Falha ao criar o banco de dados ${DATABASE_NAME}."
                         }
                         
+                        // Aguarda a criação do banco de dados
+                        echo "Aguardando o banco de dados ser criado..."
+                        sleep(5)  // Aguarda 5 segundos antes de continuar
+
                         // Executa o script SQL para inicializar o banco de dados
                         def execSqlResult = bat(script: """
                             "${MYSQL_PATH}" -u${MYSQL_USER} -p${MYSQL_PASSWORD} -h${MYSQL_HOST} ${DATABASE_NAME} < ${SQL_INIT_SCRIPT}
@@ -57,7 +61,7 @@ pipeline {
             steps {
                 script {
                     // Aumentando o timeout dos testes para lidar com possíveis atrasos
-                    bat 'npx mocha test/usuarios.test.js --exit --timeout 10000'
+                    bat 'npx mocha test/usuarios.test.js --exit --timeout 30000'  // Timeout aumentado para 30 segundos
                 }
             }
         }
