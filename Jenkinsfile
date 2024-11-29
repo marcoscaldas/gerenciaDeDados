@@ -6,7 +6,7 @@ pipeline {
         MYSQL_USER = env.DB_USER
         MYSQL_PASSWORD = env.DB_PASSWORD
         MYSQL_HOST = env.DB_HOST
-        DATABASE_NAME = 'meu_banco'  // Substitua pelo nome do seu banco de dados
+        DATABASE_NAME = 'testdb'  
     }
 
     stages {
