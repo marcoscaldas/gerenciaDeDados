@@ -2,11 +2,11 @@ pipeline {
     agent any
 
     environment {
-        MYSQL_PATH = "\"C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysql.exe\""
+        MYSQL_PATH = "C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysql.exe"
         MYSQL_USER = "${env.DB_USER}"
         MYSQL_PASSWORD = "${env.DB_PASSWORD}"
         MYSQL_HOST = "${env.DB_HOST}"
-        DATABASE_NAME = 'testdb'  
+        DATABASE_NAME = 'testdb' 
     }
 
     stages {
