@@ -37,6 +37,12 @@ pipeline {
                     } else {
                         echo "Banco de dados '${DATABASE_NAME}' já existe. Pulando criação e seguindo para os testes."
                     }
+
+                    // Garantir que o banco de dados será selecionado antes de rodar os testes
+                    echo "Configurando banco de dados ${DATABASE_NAME} para os testes."
+                    // Aqui você pode definir a variável de ambiente ou garantir que a aplicação use o banco correto
+                    // Exemplo:
+                    // def dbConn = "mysql -u${MYSQL_USER} -p${MYSQL_PASSWORD} -h${MYSQL_HOST} ${DATABASE_NAME}"
                 }
             }
         }
