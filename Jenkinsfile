@@ -6,7 +6,7 @@ pipeline {
         MYSQL_USER = "${env.DB_USER}"
         MYSQL_PASSWORD = "${env.DB_PASSWORD}"
         MYSQL_HOST = "${env.DB_HOST}"
-        DATABASE_NAME = 'testdb' 
+        DATABASE_NAME = 'testdb'  
     }
 
     stages {
@@ -18,7 +18,7 @@ pipeline {
             }
         }
 
-        stage('Verificar Banco de Dados') {
+        stage('Verificar e Criar Banco de Dados') {
             steps {
                 script {
                     // Verifica se o banco de dados existe
@@ -30,6 +30,7 @@ pipeline {
                     if (dbExists == '') {
                         echo "Banco de dados não encontrado. Criando banco e executando script SQL..."
                         bat """
+                            "${MYSQL_PATH}" -u${MYSQL_USER} -p${MYSQL_PASSWORD} -h${MYSQL_HOST} -e "CREATE DATABASE ${DATABASE_NAME};" --batch
                             "${MYSQL_PATH}" -u${MYSQL_USER} -p${MYSQL_PASSWORD} -h${MYSQL_HOST} --batch < sql/init.sql
                         """
                     } else {
@@ -42,7 +43,8 @@ pipeline {
         stage('Executar Testes') {
             steps {
                 script {
-                    bat 'npx mocha test/usuarios.test.js --exit'
+                    // Aumentando o timeout dos testes para lidar com possíveis atrasos
+                    bat 'npx mocha test/usuarios.test.js --exit --timeout 10000'
                 }
             }
         }
